@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pengundian Pasangan Bulutangkis</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input[type="text"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+            color: #fff;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #00040c;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #c7c9c5;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Pengundian Pasangan Bulutangkis</h1>
+        <input type="text" id="nameInput" placeholder="Masukkan Nama">
+        <div>
+            <button onclick="addName()">Tambah Nama</button>
+            <button onclick="drawPairs()">Undi Pasangan</button>
+        </div>
+        <p id="resultText" class="result">Hasil Undian</p>
+
+        <table id="pairTable">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Pasangan</th>
+                </tr>
+            </thead>
+            <tbody id="pairTableBody">
+                <!-- Pasangan akan ditampilkan di sini -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const nameList = [];
+        
+        function addName() {
+            const nameInput = document.getElementById('nameInput');
+            const name = nameInput.value.trim();
+
+            if (name) {
+                nameList.push(name);
+                alert('Nama ditambahkan: ' + name);
+                nameInput.value = ''; // Kosongkan input setelah menambah
+                document.getElementById('resultText').textContent = `Total nama yang ditambahkan: ${nameList.length}`;
+            } else {
+                alert('Masukkan nama terlebih dahulu');
+            }
+        }
+
+        function drawPairs() {
+            if (nameList.length < 2) {
+                alert('Tambahkan setidaknya 2 nama untuk membentuk pasangan');
+                return;
+            }
+
+            const pairTableBody = document.getElementById('pairTableBody');
+            pairTableBody.innerHTML = ''; // Clear previous pairs
+           
+           let pairCount = Math.floor(nameList.length / 2); // Determine the number of pairs to draw
+
+           for (let i = 0; i < pairCount; i++) {
+               const randomIndex1 = Math.floor(Math.random() * nameList.length);
+               const randomName1 = nameList.splice(randomIndex1, 1)[0];
+
+               const randomIndex2 = Math.floor(Math.random() * nameList.length);
+               const randomName2 = nameList.splice(randomIndex2, 1)[0];
+
+               // Tambahkan pasangan ke tabel
+               const newRow = document.createElement('tr');
+               newRow.innerHTML = `<td>${i + 1}</td><td>${randomName1} dan ${randomName2}</td>`;
+               pairTableBody.appendChild(newRow);
+           }
+
+           // Check if there are leftover names
+           if (nameList.length > 0) {
+               alert(`Terdapat ${nameList.length} nama yang tidak dipasangkan.`);
+           }
+
+           document.getElementById('resultText').textContent = `Total pasangan yang terbentuk: ${pairCount}`;
+       }
+    </script>
+</body>
+</html>
